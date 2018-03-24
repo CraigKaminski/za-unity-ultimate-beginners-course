@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    public AudioSource coinSound;
     public float walkSpeed;
     public float jumpForce;
     Rigidbody rb;
@@ -68,5 +69,23 @@ public class PlayerController : MonoBehaviour {
         bool grounded4 = Physics.Raycast(corner4, Vector3.down, 0.01f);
 
         return (grounded1 || grounded2 || grounded3 || grounded4);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Coin"))
+        {
+            GameManager.instance.IncreaseScore(1);
+            coinSound.Play();
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Enemy"))
+        {
+            print("I have run into an enemy");
+        }
+        else if (other.CompareTag("Goal"))
+        {
+            print("You made it!");
+        }
     }
 }
