@@ -63,10 +63,10 @@ public class PlayerController : MonoBehaviour {
         Vector3 corner3 = transform.position + new Vector3(size.x / 2, -size.y / 2 + 0.01f, -size.z / 2);
         Vector3 corner4 = transform.position + new Vector3(-size.x / 2, -size.y / 2 + 0.01f, -size.z / 2);
 
-        bool grounded1 = Physics.Raycast(corner1, Vector3.down, 0.01f);
-        bool grounded2 = Physics.Raycast(corner2, Vector3.down, 0.01f);
-        bool grounded3 = Physics.Raycast(corner3, Vector3.down, 0.01f);
-        bool grounded4 = Physics.Raycast(corner4, Vector3.down, 0.01f);
+        bool grounded1 = Physics.Raycast(corner1, Vector3.down, 0.02f);
+        bool grounded2 = Physics.Raycast(corner2, Vector3.down, 0.02f);
+        bool grounded3 = Physics.Raycast(corner3, Vector3.down, 0.02f);
+        bool grounded4 = Physics.Raycast(corner4, Vector3.down, 0.02f);
 
         return (grounded1 || grounded2 || grounded3 || grounded4);
     }
@@ -81,11 +81,11 @@ public class PlayerController : MonoBehaviour {
         }
         else if (other.CompareTag("Enemy"))
         {
-            print("I have run into an enemy");
+            GameManager.instance.ResetGame();
         }
         else if (other.CompareTag("Goal"))
         {
-            print("You made it!");
+            GameManager.instance.IncreaseLevel();
         }
     }
 }
