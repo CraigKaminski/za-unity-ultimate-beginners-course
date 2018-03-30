@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public int currentLevel = 1;
     public int highestLevel = 2;
     public static GameManager instance;
+    HudManager hudManager;
 
     void Awake()
     {
@@ -19,15 +20,20 @@ public class GameManager : MonoBehaviour {
         }
         else if (instance != this)
         {
+            instance.hudManager = FindObjectOfType<HudManager>();
             Destroy(gameObject);
         }
 
         DontDestroyOnLoad(gameObject);
+
+        hudManager = FindObjectOfType<HudManager>();
     }
 
     public void IncreaseScore(int amount)
     {
         score += amount;
+        if (hudManager != null)
+            hudManager.ResetHud();
         print("new score: " + score);
 
         if (score > highScore)
@@ -40,6 +46,8 @@ public class GameManager : MonoBehaviour {
     public void ResetGame()
     {
         score = 0;
+        if (hudManager != null)
+            hudManager.ResetHud();
         currentLevel = 1;
         SceneManager.LoadScene("Level1");
     }
@@ -56,5 +64,10 @@ public class GameManager : MonoBehaviour {
         }
 
         SceneManager.LoadScene("Level" + currentLevel);
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene("Game Over");
     }
 }

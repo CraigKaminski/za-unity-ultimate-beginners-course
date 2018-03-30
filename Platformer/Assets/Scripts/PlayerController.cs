@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -81,7 +82,7 @@ public class PlayerController : MonoBehaviour {
         }
         else if (other.CompareTag("Enemy"))
         {
-            GameManager.instance.ResetGame();
+            GameManager.instance.GameOver();
         }
         else if (other.CompareTag("Goal"))
         {
