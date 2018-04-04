@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     public AudioSource coinSound;
     public float walkSpeed;
     public float jumpForce;
+    public float cameraDistZ = 6;
     Rigidbody rb;
     Collider col;
     bool pressedJump = false;
@@ -19,12 +20,15 @@ public class PlayerController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
         size = col.bounds.size;
+        CameraFollowPlayer();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         WalkHandler();
         JumpHandler();
+        CameraFollowPlayer();
+        FallHandler();
 	}
 
     void WalkHandler()
@@ -34,6 +38,13 @@ public class PlayerController : MonoBehaviour {
         Vector3 movement = new Vector3(hAxis, 0, vAxis) * walkSpeed * Time.deltaTime;
         Vector3 newPos = transform.position + movement;
         rb.MovePosition(newPos);
+
+        if (hAxis != 0 || vAxis != 0)
+        {
+            Vector3 direction = new Vector3(hAxis, 0, vAxis);
+            //transform.forward = direction;
+            rb.rotation = Quaternion.LookRotation(direction);
+        }
     }
 
     void JumpHandler()
@@ -87,6 +98,23 @@ public class PlayerController : MonoBehaviour {
         else if (other.CompareTag("Goal"))
         {
             GameManager.instance.IncreaseLevel();
+        }
+    }
+
+    void CameraFollowPlayer()
+    {
+        Vector3 cameraPos = Camera.main.transform.position;
+
+        cameraPos.z = transform.position.z - cameraDistZ;
+
+        Camera.main.transform.position = cameraPos;
+    }
+
+    void FallHandler()
+    {
+        if (transform.position.y < -10)
+        {
+            GameManager.instance.GameOver();
         }
     }
 }
